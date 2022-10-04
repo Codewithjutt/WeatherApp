@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+        integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Weather App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            background-image: url(https://images.unsplash.com/photo-1615412704911-55d589229864?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=982&q=80);
+            background-position: center;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-attachment: fixed;
+
+        }
+
+        .container {
+            height: 60vh;
+            width: 50%;
+            background-color: rgba(255, 255, 255, 0.486);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .inp {
+            height: 8vh;
+            width: 70%;
+            position: absolute;
+            left: 15%;
+            top: 5%;
+            background-color: transparent;
+            border-radius: 5px;
+            border: 5px double;
+            transition: all .34s linear;
+        }
+
+        .search {
+            position: absolute;
+            color: black;
+            font-size: 2em;
+            left: 79%;
+            top: 8%;
+            height: 6.5vh;
+            cursor: pointer;
+        }
+
+        .main {
+            position: absolute;
+            height: 75%;
+            width: 90%;
+            border: 5px dotted;
+            top: 20%;
+            left: 5%;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tp {
+            color: black;
+            font-size: 2em;
+            line-height: 70px;
+        }
+
+        .inp:focus {
+            box-shadow: -1px -1px 10px 4px rgba(12, 172, 247, 0.699);
+        }
+
+        .temper {
+            font-size: 2em;
+        }
+
+        .main_heading {
+            position: absolute;
+            top: 3%;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            font-size: 5.3em;
+            text-transform: capitalize;
+            color: rgb(68, 0, 255);
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="main_heading">Weather App</h1>
+    <div class="container">
+        <form>
+            <input class="inp" type="text" placeholder="Enter City">
+            <button type="submit"><i class="fas fa-search search"></i></button>
+        </form>
+        <div class="main">
+            <img class="img">
+            <div class="temper">Loading....</div>
+            <div class="Cty"></div>
+        </div>
+    </div>
+
+
+    <script>
+        var main = document.querySelector('.container')
+        var input = document.querySelector('.inp')
+        var search = document.querySelector('.search')
+        var form = document.getElementsByTagName('form')[0];
+        var div = document.querySelector('.main')
+        var icon = document.querySelector('.img')
+        var temperature = document.querySelector('.temper')
+        var City = document.querySelector('.Cty')
+
+        form.onsubmit = (e) => {
+            e.preventDefault();
+            console.log('submitted');
+            var city = input.value
+            input.value = '';
+            getdata(city)
+        }
+
+        async function getdata(city, i) {
+            var key = `2c8eb114da3dbb960d1e89e2abb606b7`
+            var get = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`)
+            var res = await get.json()
+            console.log(res);
+            icon.setAttribute('src', `http://openweathermap.org/img/wn/${res.weather[0].icon}@2x.png`)
+            div.append(icon)
+            var temp = Math.floor(res.main.temp - 273);
+            temperature.style.color = 'red'
+            temperature.style.fontSize = '2em'
+            temperature.innerHTML = `<span class="tp">Temperature:</span>${temp}'C`
+            div.append(temperature)
+            var city_name = res.name
+            City.style.color = 'red'
+            City.style.fontSize = '2em'
+            var country = res.sys.country
+            City.innerHTML = `<span class="tp">City:</span>${city_name},${country}`
+            div.append(City)
+        }
+
+
+
+    </script>
+
+
+</body>
+
+</html>
